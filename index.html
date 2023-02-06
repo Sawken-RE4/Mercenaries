@@ -5,52 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .leaderboard {
-            width: 100%;
-            margin-top: 3px;
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
-        }
-
-        .leaderboard th,
-        .leaderboard td {
-            padding: 8px;
-            text-align: center;
-        }
-
-        .leaderboard th {
-            background-color: #000000;
-            color: white;
-        }
-
-        .leaderboard tr {
-            line-height: 85%;
-        }
-
-        .leaderboard tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .leaderboard tr:hover {
-            background-color: #ddd;
-        }
-
-        .leaderboard td:first-child {
-            text-align: center;
-            font-weight: bold;
-            width: 3%;
-        }
-
-        .leaderboard td:last-child {
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <title>Mercenaries Leaderboard</title>
 </head>
 
 <body>
-    <h1>Test</h1>
+    <h1 class="mainHeader">Leaderboard</h1>
     <table class="leaderboard">
         <thead>
             <tr id="header"></tr>
@@ -125,7 +85,12 @@
                     row.appendChild(dateCell);
 
                     const videoCell = document.createElement("td");
-                    videoCell.innerText = run.Video;
+                    //videoCell.innerText = run.Video;
+                    const videoLink = document.createElement("a")
+                    videoLink.href = run.Link
+                    videoLink.innerText = run.Video
+                    videoCell.appendChild(videoLink)
+
                     row.appendChild(videoCell);
 
                     const commentCell = document.createElement("td");
@@ -139,6 +104,9 @@
                 return video != "";
             }
             function csvToObjects(csv) {
+                function csvSplit(row) {
+                    return row.split(",").map((val) => val.substring(1, val.length - 1));
+                }
                 const csvRows = csv.split("\n");
                 let propertyNames = csvSplit(csvRows[0]).filter(str => str.length > 0);
                 propertyNames = propertyNames.map(run => {
@@ -165,9 +133,7 @@
                 }
                 return runs;
             }
-            function csvSplit(row) {
-                return row.split(",").map((val) => val.substring(1, val.length - 1));
-            }
+
             function addRank(runs) {
                 for (let index = 0; index < runs.length; index++) {
                     runs[index].Rank = index + 1;
