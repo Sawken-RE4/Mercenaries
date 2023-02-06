@@ -44,12 +44,10 @@
             renderTable(mercs_runs)
 
             function renderTable(runs) {
-                //console.log(data)
                 while (tableBody.firstChild) {
                     tableBody.removeChild(tableBody.firstChild);
                 }
                 for (const run of runs) {
-                    console.log(run)
                     const row = document.createElement("tr");
 
                     const rankCell = document.createElement("td");
@@ -126,6 +124,9 @@
                     // Delete useless values from columns D, I, and J (1, 6, 7) 
                     row.splice(1, 1)
                     row.splice(5, 2)
+                    row[0] = row[0].slice(0, 3) + "." + row[0].slice(3)
+                    row[7] = row[7].split("/").reverse().join("/");
+                    // insert the dot on the scores for readability
                     for (let j = 0; j < row.length; j++) { // iterate value by value of current row
                         run[propertyNames[j]] = row[j];
                     }
