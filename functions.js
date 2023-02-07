@@ -1,46 +1,67 @@
-export function csvToObjects(csv) {
-    function csvSplit(row) {
-        return row.split(",").map((val) => val.substring(1, val.length - 1));
+export function csvToRuns(csv) {
+    const columnsIndex = {
+        "Character": 0,
+        "Map": 1,
+        "Platform": 2,
+        "Region": 3,
+        "Unknown": 4,
+        "Flags": 5,
+        "Player": 6,
+        "Date": 7,
+        "Video": 8,
+        "Comment": 9,
+        "Link": 10,
+        "ScoreF": 11,
+    };
+    function csvToArray(row) {
+        return row
+            .split(",")
+            .map((val) => val.substring(1, val.length - 1));
+    };
+    function insertDot(score) {
+        return score.slice(0, 3) + "." + score.slice(3)
     }
+    /*     function parseDate(dateString) {
+            return new Date(dateString);
+        } */
+
+    // Array where each item is one row of the sheet in csv format
     const csvRows = csv.split("\n");
-    let propertyNames = csvSplit(csvRows[0]).filter(str => str.length > 0);
-    propertyNames = propertyNames.map(item => {
-        if (item === "Score GameCube NTSC") {
-            return "Score";
-        }
-        return item.slice(0, -1);
-    });
+
+    // Array where each item is a valid data column
+    let columns = csvToArray(csvRows[0])
+        .filter(str => str != "")
+        .map(item => {
+            return item.slice(0, -1);
+        });;
+
     let runs = [];
-    for (let i = 0; i < csvRows.length; i++) { // iterate the whole row
-        let row = csvSplit(csvRows[i]);
-        if (row[0] == "" | row[0] == "Character") { // rows that arent runs
-            continue;
-        }
+    csvRows.forEach(csvRow => {
+        let row = (csvToArray(csvRow))
+
+        // Ignore rows that arent runs
+        if ((row[columnsIndex["Map"]] == "") | (row[columnsIndex["Map"]] == "Map"))
+            return;
+
+        row[columnsIndex["ScoreF"]] = insertDot(row[columnsIndex["ScoreF"]])
+
+        // Delete columns I and J since they are useless
+        row.splice(columnsIndex["Unknown"], 2)
+
         let run = {};
-        //row = row.filter(str => str.length > 0)
-        // Delete useless values from columns D, I, and J (1, 6, 7) 
-        row.splice(4, 2)    // delete I and J
-        row[9] = row[9].slice(0, 3) + "." + row[9].slice(3)
-        // insert the dot on the scores for readability
-        for (let j = 0; j < row.length; j++) { // iterate value by value of current row
-            run[propertyNames[j]] = row[j];
-
-
-            // BELOW 4 LINES WILL CONVERT DATES IN THE "ENROLLED" COLUMN TO JS DATE OBJECTS
-            // if (propertyNames[j] === "Enrolled") {
-            //   thisObject[propertyNames[j]] = new Date(row[j]);
-            // } else {
-            //   thisObject[propertyNames[j]] = row[j];
-            // }
+        // Iterate value by value of current row
+        for (let j = 0; j < row.length; j++) {
+            run[columns[j]] = row[j];
         }
         runs.push(run);
-    }
+    });
+    runs.shift();
     return runs;
 }
 
 export function addRank(runs) {
-    for (let index = 0; index < runs.length; index++) {
-        runs[index].Rank = index + 1;
+    for (let i = 0; i < runs.length; i++) {
+        runs[i].Rank = i + 1;
     }
     return runs;
 }
