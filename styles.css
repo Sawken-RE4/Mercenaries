@@ -1,3 +1,16 @@
+* {
+    font-family: 'Roboto', Courier, monospace;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    font-weight: bold;
+}
+
+.filter-button-map,
 .filter-button-character,
 .filter-button-category {
     padding: 10px 20px;
@@ -19,6 +32,10 @@
     cursor: pointer;
     margin: auto;
     display: flex;
+}
+
+.filters {
+    text-align: center;
 }
 
 .active {
