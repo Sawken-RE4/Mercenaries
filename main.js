@@ -37,14 +37,15 @@ const app = Vue.createApp({
             let runs = [];
             for (let i = 0; i < csvRows.length; i++) { // iterate the whole row
                 let row = csvSplit(csvRows[i]);
-                if (row[0] == "") { // rows that arent runs
+                if (row[0] == "" | row[0] == "Character") { // rows that arent runs
                     continue;
                 }
                 let run = {};
                 //row = row.filter(str => str.length > 0)
                 // Delete useless values from columns D, I, and J (1, 6, 7) 
-                row.splice(1, 1)
-                row.splice(5, 2)
+                row.splice(4, 2)    // delete I and J
+                row[9] = row[9].slice(0, 3) + "." + row[9].slice(3)
+                // insert the dot on the scores for readability
                 for (let j = 0; j < row.length; j++) { // iterate value by value of current row
                     run[propertyNames[j]] = row[j];
 
@@ -77,7 +78,7 @@ const app = Vue.createApp({
         const sheetId = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
         const sheetName = encodeURIComponent("The Mercenaries");
         let sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
-        sheetURL += "&range=C8:O1427"
+        sheetURL += "&range=E8:P1427"
 
         fetch(sheetURL)
             .then((response) => response.text())
