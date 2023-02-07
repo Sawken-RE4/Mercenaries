@@ -4,6 +4,7 @@ const app = Vue.createApp({
         return {
             headers: ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"],
             mercs_runs: [],
+            dataHeader: "Mercenaries Leaderboard",
         };
     },
     methods: {
