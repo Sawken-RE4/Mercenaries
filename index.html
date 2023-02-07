@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <title>Mercenaries Leaderboard</title>
+    <link rel="icon" href="M.png" type="image/png">
 </head>
 
 <body>
     <div id="app">
         <h1 class="mainHeader">{{ dataHeader }}</h1>
-        <button onclick="search()" class="search-button">Search</button>
+        <button @click="search" class="search-button">Search</button>
         <li class="characters">
             <button id="button-wesker" class="filter-button-character" value="Wesker">Wesker</button>
             <button id="button-hunk" class="filter-button-character" value="HUNK">Hunk</button>
