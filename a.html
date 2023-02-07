@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Mercenaries Leaderboard</title>
+</head>
+
+<body>
+    <h1 class="mainHeader">Leaderboard</h1>
+    <table class="leaderboard">
+        <thead>
+            <tr id="header"></tr>
+        </thead>
+        <tbody id="body"></tbody>
+    </table>
+</body>
+
+</html>
+<script>
+    let mercs_runs = []
+    const sheetId = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
+    const sheetName = encodeURIComponent("The Mercenaries");
+    let sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
+    sheetURL += "&range=E8:P1427"
+
+    fetch(sheetURL)
+        .then((response) => response.text())
+        .then((csvText) => {
+            mercs_runs = handleResponse(csvText);
+
+            const tableHeader = document.getElementById("header");
+            const tableBody = document.getElementById("body");
+            const headers = ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"]
+            for (const header of headers) {
+                const headerCell = document.createElement("th");
+                headerCell.innerText = header;
+                tableHeader.appendChild(headerCell);
+            }
+
+            renderTable(mercs_runs)
+
+            function renderTable(runs) {
+                while (tableBody.firstChild) {
+                    tableBody.removeChild(tableBody.firstChild);
+                }
+                for (const run of runs) {
+                    const row = document.createElement("tr");
+
+                    const rankCell = document.createElement("td");
+                    rankCell.innerText = run.Rank;
+                    row.appendChild(rankCell);
+
+                    const scoreCell = document.createElement("td");
+                    scoreCell.innerText = run.ScoreF;
+                    row.appendChild(scoreCell);
+
+                    const characterCell = document.createElement("td");
+                    characterCell.innerText = run.Character;
+                    row.appendChild(characterCell);
+
+                    const mapCell = document.createElement("td");
+                    mapCell.innerText = run.Map;
+                    row.appendChild(mapCell);
+
+                    const platformCell = document.createElement("td");
+                    platformCell.innerText = run.Platform;
+                    row.appendChild(platformCell);
+
+                    const regionCell = document.createElement("td");
+                    regionCell.innerText = run.Region;
+                    row.appendChild(regionCell);
+
+                    const playerCell = document.createElement("td");
+                    playerCell.innerText = run.Player;
+                    row.appendChild(playerCell);
+
+                    const dateCell = document.createElement("td");
+                    dateCell.innerText = run.Date;
+                    row.appendChild(dateCell);
+
+                    const videoCell = document.createElement("td");
+                    //videoCell.innerText = run.Video;
+                    const videoLink = document.createElement("a")
+                    videoLink.href = run.Link
+                    videoLink.innerText = run.Video
+                    videoCell.appendChild(videoLink)
+
+                    row.appendChild(videoCell);
+
+                    const commentCell = document.createElement("td");
+                    commentCell.innerText = run.Comment;
+                    row.appendChild(commentCell);
+
+                    tableBody.appendChild(row);
+                }
+            }
+            function isNotEmpty(video) {
+                return video != "";
+            }
+            function csvToObjects(csv) {
+                function csvSplit(row) {
+                    return row.split(",").map((val) => val.substring(1, val.length - 1));
+                }
+                const csvRows = csv.split("\n");
+                console.log(csv)
+                let propertyNames = csvSplit(csvRows[0]).filter(str => str.length > 0);
+                propertyNames = propertyNames.map(run => {
+                    if (run === "Score GameCube NTSC") {
+                        return "Score";
+                    }
+                    return run.slice(0, -1);
+                });
+                let runs = [];
+                for (let i = 0; i < csvRows.length; i++) { // iterate the whole row
+                    let row = csvSplit(csvRows[i]);
+                    if (row[0] == "" | row[0] == "Character") { // rows that arent runs
+                        continue;
+                    }
+                    let run = {};
+                    //row = row.filter(str => str.length > 0)
+                    // Delete useless values from columns D, I, and J (1, 6, 7) 
+                    row.splice(4, 2)    // delete I and J
+                    row[9] = row[9].slice(0, 3) + "." + row[9].slice(3)
+                    // insert the dot on the scores for readability
+                    for (let j = 0; j < row.length; j++) { // iterate value by value of current row
+                        run[propertyNames[j]] = row[j];
+                    }
+                    //console.log(run)
+                    runs.push(run);
+                }
+                return runs;
+            }
+
+            function addRank(runs) {
+                for (let index = 0; index < runs.length; index++) {
+                    runs[index].Rank = index + 1;
+                }
+                return runs
+            }
+            function handleResponse(csvText) {
+                let sheetObjects = csvToObjects(csvText);
+                sheetObjects.shift();
+                sheetObjects = addRank(sheetObjects)
+                return sheetObjects;
+            }
+        })
+
+</script>
