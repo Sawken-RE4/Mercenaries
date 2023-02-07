@@ -1,8 +1,8 @@
-import { csvToObjects, addRank } from './functions.js';
+import { csvToRuns, addRank } from './functions.js';
 const app = Vue.createApp({
     data() {
         return {
-            headers: ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"],
+            headers: [],
             mercs_runs: [],
             dataHeader: "Mercenaries Leaderboard",
         };
@@ -10,14 +10,23 @@ const app = Vue.createApp({
     methods: {
         isNotEmpty(video) {
             return video != "";
+        },
+        search() {
+            const selectedOptions = document.querySelectorAll(".active");
+            console.log("Search button")
         }
+    },
+    updated() {
+        console.log("Updated.", this.mercs_runs)
     },
     created() {
         function handleResponse(csvText) {
-            let sheetObjects = csvToObjects(csvText);
-            sheetObjects.shift();
-            sheetObjects = addRank(sheetObjects)
-            return sheetObjects;
+            let runs = csvToRuns(csvText);
+            runs = addRank(runs)
+            return runs;
+        }
+        function getColumns() {
+            return ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"]
         }
         const sheetId = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
         const sheetName = encodeURIComponent("The Mercenaries");
@@ -25,7 +34,11 @@ const app = Vue.createApp({
         let sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}${range}`;
         fetch(sheetURL)
             .then((response) => response.text())
-            .then((csvText) => this.mercs_runs = handleResponse(csvText))
+            .then((csvText) => {
+                this.mercs_runs = handleResponse(csvText);
+                this.headers = getColumns()
+                //this.dataHeader = getDataHeader()
+            })
     },
 })
 app.mount('#app')
