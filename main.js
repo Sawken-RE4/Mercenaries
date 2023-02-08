@@ -1,4 +1,4 @@
-import { csvToRuns, addRank } from './functions.js';
+import { csvToRuns, addRank, findRuns } from './functions.js';
 const app = Vue.createApp({
     data() {
         return {
@@ -16,45 +16,64 @@ const app = Vue.createApp({
                 { name: 'Leon', active: false }
             ],
             categories: [
-                { name: 'Steam60', active: false },
-                { name: 'PS4', active: false },
-                { name: 'PS3', active: false },
-                { name: 'GCNTSC', active: false },
+                { name: 'Steam 60fps', active: false },
+                { name: 'PS4/5 and XboxOne/SeriesS/SeriesX', active: false },
+                { name: 'PS3, Xbox 360, Steam30fps, GC PAL, GC NTSC-J', active: false },
+                { name: 'GC NTSC', active: false },
                 { name: 'Wii', active: false },
-                { name: 'PS2', active: false }
+                { name: 'PS2, PC07', active: false }
             ],
+            currentMapFilter: "",
+            currentCharacterFilter: "",
+            currentCategoryFilter: "",
             headers: [],
             mercs_runs: [],
             dataHeader: "Mercenaries Leaderboard",
-            activeIndex: -1,
         };
     },
     methods: {
         isNotEmpty(video) {
             return video != "";
         },
-        setActiveMap(index) {
-            this.activeIndex = (this.activeIndex === index ? -1 : index);
-        },
         search() {
             const selectedOptions = document.querySelectorAll(".active");
-            console.log("Search button")
+            let options = {}
+            selectedOptions.forEach(element => {
+                options.name = (element.innerText)
+                options.type = (element.classList)
+            });
+            //this.mercs_runs = findRuns(mercs_runs, options)
+
         },
         toggleActiveMap(map) {
             this.maps.forEach(m => m.active = false)
             map.active = !map.active
+            this.currentMapFilter = map
         },
         toggleActiveCharacter(character) {
             this.characters.forEach(c => c.active = false)
             character.active = !character.active
+            this.currentCharacterFilter = character
         },
         toggleActiveCategory(category) {
             this.categories.forEach(c => c.active = false)
             category.active = !category.active
+            this.currentCategoryFilter = category
         },
     },
+    computed: {
+        filteredRuns() {
+            let runs = this.mercs_runs
+            let filter = this.currentMapFilter
+            console.log(runs)
+            console.log(filter)
+            return runs.filter(function (run) {
+                return run["Map"] == filter
+            });
+        }
+    },
     updated() {
-        console.log("Updated.", this.mercs_runs)
+        //console.log("Updated.", this.mercs_runs)
     },
     created() {
         function handleResponse(csvText) {

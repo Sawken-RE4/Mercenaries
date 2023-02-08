@@ -42,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(run, i) in mercs_runs" :key="i">
+                <tr v-for="(run, i) in filteredRuns" :key="i">
                     <td>{{ run.Rank }}</td>
                     <td>{{ run.ScoreF }}</td>
                     <td>{{ run.Character }}</td>
