@@ -12,6 +12,7 @@ export function csvToRuns(csv) {
         "Comment": 9,
         "Link": 10,
         "ScoreF": 11,
+        "Country": 12,
     };
     function csvToArray(row) {
         return row
