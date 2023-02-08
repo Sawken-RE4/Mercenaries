@@ -53,7 +53,7 @@
                     <td>{{ run.Player }}</td>
                     <td>{{ run.Date }}</td>
                     <td>
-                        <a v-if="isNotEmpty(run.Video)" :href="run.Link">{{ run.Video }}</a>
+                        <a v-if="isNotEmpty(run.Video)" :href="run.Link" target="_blank">{{ run.Video }}</a>
                     </td>
                     <td>{{ run.Comment }}</td>
                 </tr>
