@@ -2,7 +2,27 @@ import { csvToRuns, addRank } from './functions.js';
 const app = Vue.createApp({
     data() {
         return {
-            maps: ["Village", "Castle", "Base", "Waterworld"],
+            maps: [
+                { name: 'Village', active: false },
+                { name: 'Castle', active: false },
+                { name: 'Base', active: false },
+                { name: 'Waterworld', active: false }
+            ],
+            characters: [
+                { name: 'Wesker', active: false },
+                { name: 'Hunk', active: false },
+                { name: 'Ada', active: false },
+                { name: 'Krauser', active: false },
+                { name: 'Leon', active: false }
+            ],
+            categories: [
+                { name: 'Steam60', active: false },
+                { name: 'PS4', active: false },
+                { name: 'PS3', active: false },
+                { name: 'GCNTSC', active: false },
+                { name: 'Wii', active: false },
+                { name: 'PS2', active: false }
+            ],
             headers: [],
             mercs_runs: [],
             dataHeader: "Mercenaries Leaderboard",
@@ -19,7 +39,19 @@ const app = Vue.createApp({
         search() {
             const selectedOptions = document.querySelectorAll(".active");
             console.log("Search button")
-        }
+        },
+        toggleActiveMap(map) {
+            this.maps.forEach(m => m.active = false)
+            map.active = !map.active
+        },
+        toggleActiveCharacter(character) {
+            this.characters.forEach(c => c.active = false)
+            character.active = !character.active
+        },
+        toggleActiveCategory(category) {
+            this.categories.forEach(c => c.active = false)
+            category.active = !category.active
+        },
     },
     updated() {
         console.log("Updated.", this.mercs_runs)
