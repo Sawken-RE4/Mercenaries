@@ -92,3 +92,26 @@ a:hover {
 .leaderboard td:last-child {
     text-align: center;
 }
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button,
+.pagination span {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: large;
+}
+
+.pagination span {
+    font-weight: bold;
+}

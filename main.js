@@ -29,6 +29,8 @@ const app = Vue.createApp({
             columns: ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"],
             mercs_runs: [],
             numberOfRuns: 0,
+            itemsPerPage: 20,
+            currentPage: 1,
             //dataHeader: "Mercenaries Leaderboard",
         };
     },
@@ -51,6 +53,9 @@ const app = Vue.createApp({
             category.active = !category.active
             this.currentCategoryFilter = category
         },
+        changePage(page) {
+            this.currentPage = page;
+        }
     },
     computed: {
         filteredRuns() {
@@ -58,14 +63,18 @@ const app = Vue.createApp({
             let filterMap = { ...this.currentMapFilter }.name
             let filterCharacter = { ...this.currentCharacterFilter }.name
             let filterCategory = { ...this.currentCategoryFilter }.name
+
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+
             if ((filterMap === undefined) & (filterCharacter === undefined) & (filterCategory === undefined)) {
-                return this.mercs_runs
+                return this.mercs_runs.slice(start, end);
             }
             else {
                 let filters = [filterMap, filterCharacter, filterCategory]
                 let response = findRuns(runs, filters)
                 this.numberOfRuns = response.length
-                return response
+                return response.slice(start, end);
             }
         },
         dataHeader() {
@@ -73,6 +82,9 @@ const app = Vue.createApp({
             let filterCharacter = { ...this.currentCharacterFilter }.name
             let filterCategory = { ...this.currentCategoryFilter }.name
             return `${filterMap} | ${filterCharacter} | ${filterCategory} (${this.numberOfRuns} runs)`
+        },
+        pageCount() {
+            return Math.ceil(this.mercs_runs.length / this.itemsPerPage);
         }
     },
     updated() {
