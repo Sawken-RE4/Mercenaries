@@ -21,9 +21,6 @@ export function csvToRuns(csv) {
     function insertDot(score) {
         return score.slice(0, 3) + "." + score.slice(3)
     }
-    /*     function parseDate(dateString) {
-            return new Date(dateString);
-        } */
 
     // Array where each item is one row of the sheet in csv format
     const csvRows = csv.split("\n");
@@ -45,11 +42,11 @@ export function csvToRuns(csv) {
 
         row[columnsIndex["ScoreF"]] = insertDot(row[columnsIndex["ScoreF"]])
 
-        // Delete columns I and J since they are useless
+        // Delete data from columns I and J since they are useless
         row.splice(columnsIndex["Unknown"], 2)
 
         let run = {};
-        // Iterate value by value of current row
+        // Iterate value by value of current row and assign the corresponding data
         for (let j = 0; j < row.length; j++) {
             run[columns[j]] = row[j];
         }
@@ -65,3 +62,15 @@ export function addRank(runs) {
     }
     return runs;
 }
+
+/* Useful for later
+
+let test = runs.filter(function (run) {
+    return run.Map == "Village" & run.Character == "Wesker"
+});
+
+function parseDate(dateString) {
+    return new Date(dateString);
+} 
+
+*/
