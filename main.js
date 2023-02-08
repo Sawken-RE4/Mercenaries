@@ -2,14 +2,19 @@ import { csvToRuns, addRank } from './functions.js';
 const app = Vue.createApp({
     data() {
         return {
+            maps: ["Village", "Castle", "Base", "Waterworld"],
             headers: [],
             mercs_runs: [],
             dataHeader: "Mercenaries Leaderboard",
+            activeIndex: -1,
         };
     },
     methods: {
         isNotEmpty(video) {
             return video != "";
+        },
+        setActiveMap(index) {
+            this.activeIndex = (this.activeIndex === index ? -1 : index);
         },
         search() {
             const selectedOptions = document.querySelectorAll(".active");

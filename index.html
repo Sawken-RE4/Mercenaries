@@ -15,14 +15,18 @@
     <div id="app">
         <h1 class="mainHeader">{{ dataHeader }}</h1>
         <button @click="search" class="search-button">Search</button>
-        <li class="characters">
+        <li class="filters" id="maps">
+            <button v-for="(item, i) in maps" :key="i" class="filter-button-map" :class="{ active: activeIndex === i }"
+                @click="setActiveMap(index)">{{item}}</button>
+        </li>
+        <li class="filters">
             <button id="button-wesker" class="filter-button-character" value="Wesker">Wesker</button>
             <button id="button-hunk" class="filter-button-character" value="HUNK">Hunk</button>
             <button id="button-ada" class="filter-button-character" value="Ada">Ada</button>
             <button id="button-krauser" class="filter-button-character" value="Krauser">Krauser</button>
             <button id="button-leon" class="filter-button-character" value="Leon">Leon</button>
         </li>
-        <li class="categories">
+        <li class="filters">
             <button id="button-steam" class="filter-button-category" value="Steam60">Steam 60fps</button>
             <button id="button-ps4" class="filter-button-category" value="PS4_PS5_X1_SeriesX_SeriesS">PS4/5 and Xbox
                 One/SeriesS/SeriesX</button>
