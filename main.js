@@ -10,7 +10,7 @@ const app = Vue.createApp({
             ],
             characters: [
                 { name: 'Wesker', active: false },
-                { name: 'Hunk', active: false },
+                { name: 'HUNK', active: false },
                 { name: 'Ada', active: false },
                 { name: 'Krauser', active: false },
                 { name: 'Leon', active: false }
@@ -26,24 +26,15 @@ const app = Vue.createApp({
             currentMapFilter: "",
             currentCharacterFilter: "",
             currentCategoryFilter: "",
-            headers: [],
+            columns: ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"],
             mercs_runs: [],
-            dataHeader: "Mercenaries Leaderboard",
+            numberOfRuns: 0,
+            //dataHeader: "Mercenaries Leaderboard",
         };
     },
     methods: {
         isNotEmpty(video) {
             return video != "";
-        },
-        search() {
-            const selectedOptions = document.querySelectorAll(".active");
-            let options = {}
-            selectedOptions.forEach(element => {
-                options.name = (element.innerText)
-                options.type = (element.classList)
-            });
-            //this.mercs_runs = findRuns(mercs_runs, options)
-
         },
         toggleActiveMap(map) {
             this.maps.forEach(m => m.active = false)
@@ -64,12 +55,24 @@ const app = Vue.createApp({
     computed: {
         filteredRuns() {
             let runs = this.mercs_runs
-            let filter = this.currentMapFilter
-            console.log(runs)
-            console.log(filter)
-            return runs.filter(function (run) {
-                return run["Map"] == filter
-            });
+            let filterMap = { ...this.currentMapFilter }.name
+            let filterCharacter = { ...this.currentCharacterFilter }.name
+            let filterCategory = { ...this.currentCategoryFilter }.name
+            if ((filterMap === undefined) & (filterCharacter === undefined) & (filterCategory === undefined)) {
+                return this.mercs_runs
+            }
+            else {
+                let filters = [filterMap, filterCharacter, filterCategory]
+                let response = findRuns(runs, filters)
+                this.numberOfRuns = response.length
+                return response
+            }
+        },
+        dataHeader() {
+            let filterMap = { ...this.currentMapFilter }.name
+            let filterCharacter = { ...this.currentCharacterFilter }.name
+            let filterCategory = { ...this.currentCategoryFilter }.name
+            return `${filterMap} | ${filterCharacter} | ${filterCategory} (${this.numberOfRuns} runs)`
         }
     },
     updated() {
@@ -81,9 +84,6 @@ const app = Vue.createApp({
             runs = addRank(runs)
             return runs;
         }
-        function getColumns() {
-            return ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"]
-        }
         const sheetId = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
         const sheetName = encodeURIComponent("The Mercenaries");
         const range = "&range=E8:P1427"
@@ -92,8 +92,6 @@ const app = Vue.createApp({
             .then((response) => response.text())
             .then((csvText) => {
                 this.mercs_runs = handleResponse(csvText);
-                this.headers = getColumns()
-                //this.dataHeader = getDataHeader()
             })
     },
 })

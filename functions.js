@@ -65,7 +65,7 @@ export function addRank(runs) {
 
 
 
-export function findRuns(runs, options) {
+export function findRuns(runs, filters) {
     /* Example options:
     [
         {type: "Map", name: "Village"},
@@ -74,17 +74,11 @@ export function findRuns(runs, options) {
     ]
     */
     function findRunsMap(runs, map) {
-        const maps = ["Village", "Castle", "Base", "Waterworld"]
-        if (!maps.includes(map))
-            return []
         return runs.filter(function (run) {
             return run["Map"] == map
         });
     }
     function findRunsCharacter(runs, character) {
-        const characters = ["Wesker", "HUNK", "Ada", "Krauser", "Leon"]
-        if (!characters.includes(character))
-            return []
         return runs.filter(function (run) {
             return run["Character"] == character
         });
@@ -92,6 +86,8 @@ export function findRuns(runs, options) {
     function findRunsCategory(runs, category) {
         const newGenConsoles = ["PlayStation 4", "PlayStation 5", "Xbox One", "Xbox Series X", "Xbox Series S"]
         const oldGenConsoles = ["PlayStation 3", "Xbox 360", "Steam 30fps", "GameCube"]
+        if (category === undefined)
+            return []
         switch (category) {
             case "Steam 60fps":
                 return runs.filter(function (run) {
@@ -120,13 +116,31 @@ export function findRuns(runs, options) {
                 return runs.filter(function (run) {
                     return run["Platform"] == "PlayStation 2" | run["Platform"] == "PC '07"
                 });
-            default:
-                return []
         }
     }
-    if (options.length == 0)        // no options, show all runs
+    let map = filters[0]
+    let character = filters[1]
+    let category = filters[2]
+    if ((map !== undefined) & (character !== undefined) & (category !== undefined)) {
+        let runs_map = findRunsMap(runs, map)
+        let runs_character = findRunsCharacter(runs_map, character)
+        let runs_category = findRunsCategory(runs_character, category)
+        addRank(runs_category)
+        return runs_category
+    }
+    return runs
+
+    //let final_runs = runs_map.concat(runs_character, runs_category)
+    //addRank(final_runs)
+
+
+
+    if (options.length == 0) {       // no options, show all runs
+        console.log("0 arguments")
         return runs
+    }
     if (options.length == 1) {      // only one option, either map, character or category
+        console.log("1 argument")
         let arg = options[0].name
         switch (options[0].type) {
             case "Map": return findRunsMap(runs, arg)
