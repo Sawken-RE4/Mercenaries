@@ -1,4 +1,7 @@
 export function csvToRuns(csv) {
+    /*
+    Converts a csv string onto an array of objects (runs)
+    */
     const columnsIndex = {
         "Character": 0,
         "Map": 1,
@@ -54,6 +57,7 @@ export function csvToRuns(csv) {
         runs.push(run);
     });
     runs.shift();
+    addRank(runs)
     return runs;
 }
 

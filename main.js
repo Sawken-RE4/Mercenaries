@@ -1,4 +1,4 @@
-import { csvToRuns, addRank, findRuns } from './functions.js';
+import { csvToRuns, findRuns } from './functions.js';
 const app = Vue.createApp({
     data() {
         return {
@@ -87,15 +87,7 @@ const app = Vue.createApp({
             return Math.ceil(this.mercs_runs.length / this.itemsPerPage);
         }
     },
-    updated() {
-        //console.log("Updated.", this.mercs_runs)
-    },
     created() {
-        function handleResponse(csvText) {
-            let runs = csvToRuns(csvText);
-            runs = addRank(runs)
-            return runs;
-        }
         const sheetId = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
         const sheetName = encodeURIComponent("The Mercenaries");
         const range = "&range=E8:Q1427"
@@ -103,7 +95,7 @@ const app = Vue.createApp({
         fetch(sheetURL)
             .then((response) => response.text())
             .then((csvText) => {
-                this.mercs_runs = handleResponse(csvText);
+                this.mercs_runs = csvToRuns(csvText);
             })
     },
 })
