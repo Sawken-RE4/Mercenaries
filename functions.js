@@ -63,6 +63,79 @@ export function addRank(runs) {
     return runs;
 }
 
+
+
+export function findRuns(runs, options) {
+    /* Example options:
+    [
+        {type: "Map", name: "Village"},
+        {type: "Character", name: "Krauser"}
+        {type: "Category", name: "Wii"}
+    ]
+    */
+    function findRunsMap(runs, map) {
+        const maps = ["Village", "Castle", "Base", "Waterworld"]
+        if (!maps.includes(map))
+            return []
+        return runs.filter(function (run) {
+            return run["Map"] == map
+        });
+    }
+    function findRunsCharacter(runs, character) {
+        const characters = ["Wesker", "HUNK", "Ada", "Krauser", "Leon"]
+        if (!characters.includes(character))
+            return []
+        return runs.filter(function (run) {
+            return run["Character"] == character
+        });
+    }
+    function findRunsCategory(runs, category) {
+        const newGenConsoles = ["PlayStation 4", "PlayStation 5", "Xbox One", "Xbox Series X", "Xbox Series S"]
+        const oldGenConsoles = ["PlayStation 3", "Xbox 360", "Steam 30fps", "GameCube"]
+        switch (category) {
+            case "Steam 60fps":
+                return runs.filter(function (run) {
+                    return run["Platform"] == category
+                });
+            case "PS4/5 and XboxOne/SeriesS/SeriesX":
+                return runs.filter(function (run) {
+                    return newGenConsoles.includes(run["Platform"])
+                });
+            case "PS3, Xbox 360, Steam30fps, GC PAL, GC NTSC-J":
+                let all_runs = runs.filter(function (run) {
+                    return oldGenConsoles.includes(run["Platform"])
+                });
+                return all_runs.filter(function (run) {
+                    return run["Region"] != "NTSC"
+                });
+            case "GC NTSC":
+                return runs.filter(function (run) {
+                    return run["Platform"] == "GameCube" & run["Region"] == "NTSC"
+                });
+            case "Wii":
+                return runs.filter(function (run) {
+                    return run["Platform"] == "Wii"
+                });
+            case "PS2, PC07":
+                return runs.filter(function (run) {
+                    return run["Platform"] == "PlayStation 2" | run["Platform"] == "PC '07"
+                });
+            default:
+                return []
+        }
+    }
+    if (options.length == 0)        // no options, show all runs
+        return runs
+    if (options.length == 1) {      // only one option, either map, character or category
+        let arg = options[0].name
+        switch (options[0].type) {
+            case "Map": return findRunsMap(runs, arg)
+            case "Character": return findRunsCharacter(runs, arg)
+            case "Category": return findRunsCategory(runs, arg)
+        }
+    }
+}
+
 /* Useful for later
 
 let test = runs.filter(function (run) {
