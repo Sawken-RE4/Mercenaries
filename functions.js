@@ -99,7 +99,7 @@ export function findRuns(runs, map, character, category) {
                 return runs.filter(function (run) {
                     return newGenConsoles.includes(run["Platform"])
                 });
-            case "PS3, Xbox 360, Steam30fps, GC PAL, GC NTSC-J":
+            case "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J":
                 let all_runs = runs.filter(function (run) {
                     return oldGenConsoles.includes(run["Platform"])
                 });
@@ -121,62 +121,45 @@ export function findRuns(runs, map, character, category) {
         }
     }
 
-    let header;
     let response_runs;
 
     if ((map) && (character) && (category)) {
         let runs_map = findRunsMap(runs, map)
         let runs_character = findRunsCharacter(runs_map, character)
         response_runs = findRunsCategory(runs_character, category)
-
-        header = `${map} | ${character} | ${category} `
     }
 
     if ((map) && (character) && (!category)) {
         let runs_map = findRunsMap(runs, map)
         response_runs = findRunsCharacter(runs_map, character)
-
-        header = `${map} | ${character} | All categories `
     }
 
     if ((map) && (!character) && (category)) {
         let runs_map = findRunsMap(runs, map)
         response_runs = findRunsCategory(runs_map, category)
-
-        header = `${map} | All characters | ${category} `
     }
 
-    if ((map) && (!character) && (!category)) {
+    if ((map) && (!character) && (!category))
         response_runs = findRunsMap(runs, map)
-
-        header = `${map} | All characters | All categories `
-    }
 
     if ((!map) && (character) && (category)) {
         let runs_character = findRunsCharacter(runs, character)
         response_runs = findRunsCategory(runs_character, category)
-
-        header = `All maps | ${character} | ${category} `
     }
 
-    if ((!map) && (character) && (!category)) {
+    if ((!map) && (character) && (!category))
         response_runs = findRunsCharacter(runs, character)
 
-        header = `All maps | ${character} | All categories `
-    }
-
-    if ((!map) && (!character) && (category)) {
+    if ((!map) && (!character) && (category))
         response_runs = findRunsCategory(runs, category)
 
-        header = `All maps | All characters | ${category} `
-    }
-    if ((!map) && (!character) && (!category)) {
+    if ((!map) && (!character) && (!category))
         response_runs = runs
 
-        header = `All maps | All characters | All categories `
-    }
-    header += `(${response_runs.length} runs)`
+    let header = [map || "All maps", character || "All characters", category || "All categories"]
+        .join(" | ") + ` (${response_runs.length} runs)`;
     addRank(response_runs)
+
     return {
         "runs": response_runs,
         "header": header
