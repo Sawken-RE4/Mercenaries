@@ -1,4 +1,4 @@
-import { csvToRuns, findRuns } from './functions.js';
+import { csvToRuns, findRuns, findRunsPlayer } from './functions.js';
 const app = Vue.createApp({
     data() {
         return {
@@ -32,6 +32,7 @@ const app = Vue.createApp({
             itemsPerPage: 50,
             currentPage: 1,
             pageCount: 0,
+            searchPlayer: "",
         };
     },
     methods: {
@@ -42,9 +43,10 @@ const app = Vue.createApp({
             this.maps.forEach(m => m.active = false)
             this.characters.forEach(c => c.active = false)
             this.categories.forEach(c => c.active = false)
-            this.currentMapFilter = undefined
-            this.currentCharacterFilter = undefined
-            this.currentCategoryFilter = undefined
+            this.currentMapFilter = ""
+            this.currentCharacterFilter = ""
+            this.currentCategoryFilter = ""
+            this.searchPlayer = ""
         },
         toggleActiveMap(map) {
             this.maps.forEach(m => m.active = false)
@@ -61,6 +63,13 @@ const app = Vue.createApp({
             category.active = !category.active
             this.currentCategoryFilter = category
         },
+        noFilters() {
+            return (
+                this.currentMapFilter == "" &
+                this.currentCharacterFilter == "" &
+                this.currentCategoryFilter == ""
+            )
+        },
         changePage(page) {
             this.currentPage = page;
         }
@@ -68,20 +77,22 @@ const app = Vue.createApp({
     computed: {
         filteredRuns() {
             let runs = this.mercs_runs
-            let filterMap = { ...this.currentMapFilter }.name
-            let filterCharacter = { ...this.currentCharacterFilter }.name
-            let filterCategory = { ...this.currentCategoryFilter }.name
-
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
+            let response;
 
-            let response = findRuns(runs, filterMap, filterCharacter, filterCategory)
-            let filtered = response.runs
+            if (this.searchPlayer != "")
+                response = findRunsPlayer(runs, this.searchPlayer.toLowerCase())
+            else {
+                let filterMap = { ...this.currentMapFilter }.name
+                let filterCharacter = { ...this.currentCharacterFilter }.name
+                let filterCategory = { ...this.currentCategoryFilter }.name
+                response = findRuns(runs, filterMap, filterCharacter, filterCategory)
+            }
+
             this.dataHeader = response.header
-            //this.columns = response.columns
-            this.pageCount = Math.ceil(filtered.length / this.itemsPerPage);
-            return filtered.slice(start, end);
-
+            this.pageCount = Math.ceil(response.runs.length / this.itemsPerPage);
+            return response.runs.slice(start, end);
         },
     },
     created() {
