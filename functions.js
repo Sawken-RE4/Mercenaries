@@ -93,7 +93,7 @@ export function findRuns(runs, map, character, category) {
         switch (category) {
             case "Steam 60fps":
                 return runs.filter(function (run) {
-                    return run["Platform"] == category
+                    return (run["Platform"] == category) | (run["Platform"] == category.slice(0, 5))
                 });
             case "PS4/5 and XboxOne/SeriesS/SeriesX":
                 return runs.filter(function (run) {
