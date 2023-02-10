@@ -81,7 +81,7 @@ const app = Vue.createApp({
             const end = start + this.itemsPerPage;
             let response;
 
-            if (this.searchPlayer != "")
+            if (this.searchPlayer != "")    // user is using the search button
                 response = findRunsPlayer(runs, this.searchPlayer.toLowerCase())
             else {
                 let filterMap = { ...this.currentMapFilter }.name
