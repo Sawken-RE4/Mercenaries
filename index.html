@@ -16,10 +16,12 @@
     <div id="app">
         <h1 class="mainHeader">Mercenaries Leaderboard</h1>
         <h1 class="mainHeader">{{ dataHeader }}</h1>
-        <!--         <button @click="search" class="search-button">Search</button> -->
-        <div class="center-button">
+
+        <li class="filters">
             <button @click="clearFilters()" class="clear-filters">Clear filters</button>
-        </div>
+            <input v-if="noFilters()" class="search-input" type="text" placeholder="Search player &#x1F50D;"
+                v-model="searchPlayer">
+        </li>
         <li class="filters" id="maps">
             <button v-for="(map, i) in maps" :key="i" class="filter-button-map" :class="{ active: map.active }"
                 @click="toggleActiveMap(map)">
