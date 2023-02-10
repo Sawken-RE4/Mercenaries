@@ -10,6 +10,11 @@ a:hover {
     font-weight: bold;
 }
 
+a:visited {
+    text-decoration: none;
+    color: #0066cc;
+}
+
 #country {
     width: 35px;
     height: 20px;
@@ -17,6 +22,7 @@ a:hover {
     vertical-align: middle;
 }
 
+.clear-filters,
 .filter-button-map,
 .filter-button-character,
 .filter-button-category {
@@ -27,6 +33,16 @@ a:hover {
     background-color: #000000;
     border-radius: 10%;
     cursor: pointer;
+}
+
+.center-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-filters:active {
+    background-color: #943535;
 }
 
 .search-button {
@@ -43,6 +59,7 @@ a:hover {
 
 .filters {
     text-align: center;
+    list-style-type: none;
 }
 
 .active {
