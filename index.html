@@ -52,12 +52,18 @@
                 <tr v-for="(run, i) in filteredRuns" :key="i">
                     <td>{{ run.Rank }}</td>
                     <td>{{ run.ScoreF }}</td>
-                    <td>{{ run.Character }}</td>
-                    <td>{{ run.Map }}</td>
+                    <td>
+                        <img id="character" v-bind:src="'/Mercenaries/static/characters/' + run.Character + '.jpg'">
+                    </td>
+                    <td>
+                        <img id="map" v-bind:src="'/Mercenaries/static/maps/' + run.Map + '.jpg'">
+                    </td>
                     <td>{{ run.Platform }}</td>
                     <td>{{ run.Region }}</td>
-                    <td> <img id="country" v-bind:src="'/Mercenaries/static/flags/' + run.Country + '.png'">{{
-                        run.Player }}</td>
+                    <td>
+                        <img id="country" v-bind:src="'/Mercenaries/static/flags/' + run.Country + '.png'">
+                        {{run.Player }}
+                    </td>
                     <td>{{ run.Date }}</td>
                     <td>
                         <a v-if=" isNotEmpty(run.Video)" :href="run.Link" target="_blank">{{ run.Video }}</a>

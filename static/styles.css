@@ -22,6 +22,34 @@ a:visited {
     vertical-align: middle;
 }
 
+#character {
+    width: 35px;
+    height: 35px;
+    margin-right: 5px;
+    vertical-align: middle;
+    filter: brightness(200%);
+    border-radius: 65%;
+    border-style: double;
+    transition: transform 0.5s;
+}
+
+#character:hover,
+#map:hover {
+    transform: scale(2.5)
+}
+
+#map {
+    width: 100px;
+    height: 35px;
+    margin-right: 5px;
+    vertical-align: middle;
+    filter: brightness(150%);
+    border-radius: 15%;
+    border-style: double;
+    transition: transform 0.5s;
+}
+
+
 .search-input,
 .clear-filters,
 .filter-button-map,
