@@ -26,8 +26,8 @@ a:visited {
 .filter-button-map,
 .filter-button-character,
 .filter-button-category {
-    padding: 10px 20px;
-    font-size: 1.2em;
+    padding: 8px 15px;
+    font-size: 1.1em;
     color: white;
     font-weight: bold;
     background-color: #000000;
@@ -68,6 +68,8 @@ a:visited {
 
 .mainHeader {
     text-align: center;
+    margin-top: 1px;
+    margin-bottom: 10px;
 }
 
 .leaderboard {
