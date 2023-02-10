@@ -183,6 +183,13 @@ export function findRuns(runs, map, character, category) {
     }
 }
 
+export function findRunsPlayer(runs, player) {
+    let runsPlayer = runs.filter(function (run) {
+        return run["Player"].toLowerCase().includes(player)
+    });
+    let header = `All ${runsPlayer.length} runs from ${player}`
+    return { "runs": runsPlayer, "header": header }
+}
 /* Useful for later
 
 let test = runs.filter(function (run) {
