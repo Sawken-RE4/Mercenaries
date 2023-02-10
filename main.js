@@ -27,16 +27,24 @@ const app = Vue.createApp({
             currentCharacterFilter: "",
             currentCategoryFilter: "",
             columns: ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"],
+            dataHeader: "All runs",
             mercs_runs: [],
-            numberOfRuns: 0,
-            itemsPerPage: 20,
+            itemsPerPage: 50,
             currentPage: 1,
-            //dataHeader: "Mercenaries Leaderboard",
+            pageCount: 0,
         };
     },
     methods: {
         isNotEmpty(video) {
             return video != "";
+        },
+        clearFilters() {
+            this.maps.forEach(m => m.active = false)
+            this.characters.forEach(c => c.active = false)
+            this.categories.forEach(c => c.active = false)
+            this.currentMapFilter = undefined
+            this.currentCharacterFilter = undefined
+            this.currentCategoryFilter = undefined
         },
         toggleActiveMap(map) {
             this.maps.forEach(m => m.active = false)
@@ -67,25 +75,14 @@ const app = Vue.createApp({
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
 
-            if ((filterMap === undefined) & (filterCharacter === undefined) & (filterCategory === undefined)) {
-                return this.mercs_runs.slice(start, end);
-            }
-            else {
-                let filters = [filterMap, filterCharacter, filterCategory]
-                let response = findRuns(runs, filters)
-                this.numberOfRuns = response.length
-                return response.slice(start, end);
-            }
+            let response = findRuns(runs, filterMap, filterCharacter, filterCategory)
+            let filtered = response.runs
+            this.dataHeader = response.header
+            //this.columns = response.columns
+            this.pageCount = Math.ceil(filtered.length / this.itemsPerPage);
+            return filtered.slice(start, end);
+
         },
-        dataHeader() {
-            let filterMap = { ...this.currentMapFilter }.name
-            let filterCharacter = { ...this.currentCharacterFilter }.name
-            let filterCategory = { ...this.currentCategoryFilter }.name
-            return `${filterMap} | ${filterCharacter} | ${filterCategory} (${this.numberOfRuns} runs)`
-        },
-        pageCount() {
-            return Math.ceil(this.mercs_runs.length / this.itemsPerPage);
-        }
     },
     created() {
         const sheetId = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
