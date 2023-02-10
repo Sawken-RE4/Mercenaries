@@ -61,23 +61,21 @@ export function csvToRuns(csv) {
     return runs;
 }
 
-export function addRank(runs) {
+function addRank(runs) {
     for (let i = 0; i < runs.length; i++) {
         runs[i].Rank = i + 1;
     }
     return runs;
 }
 
+/* function deleteColumn(runs, column) {
+    for (let i = 0; i < runs.length; i++) {
+        delete (runs[i][column])
+    }
+    return runs;
+} */
 
-
-export function findRuns(runs, filters) {
-    /* Example options:
-    [
-        {type: "Map", name: "Village"},
-        {type: "Character", name: "Krauser"}
-        {type: "Category", name: "Wii"}
-    ]
-    */
+export function findRuns(runs, map, character, category) {
     function findRunsMap(runs, map) {
         return runs.filter(function (run) {
             return run["Map"] == map
@@ -91,8 +89,7 @@ export function findRuns(runs, filters) {
     function findRunsCategory(runs, category) {
         const newGenConsoles = ["PlayStation 4", "PlayStation 5", "Xbox One", "Xbox Series X", "Xbox Series S"]
         const oldGenConsoles = ["PlayStation 3", "Xbox 360", "Steam 30fps", "GameCube"]
-        if (category === undefined)
-            return []
+
         switch (category) {
             case "Steam 60fps":
                 return runs.filter(function (run) {
@@ -123,35 +120,66 @@ export function findRuns(runs, filters) {
                 });
         }
     }
-    let map = filters[0]
-    let character = filters[1]
-    let category = filters[2]
-    if ((map !== undefined) & (character !== undefined) & (category !== undefined)) {
+
+    let header;
+    let response_runs;
+
+    if ((map) && (character) && (category)) {
         let runs_map = findRunsMap(runs, map)
         let runs_character = findRunsCharacter(runs_map, character)
-        let runs_category = findRunsCategory(runs_character, category)
-        addRank(runs_category)
-        return runs_category
+        response_runs = findRunsCategory(runs_character, category)
+
+        header = `${map} | ${character} | ${category} `
     }
-    return runs
 
-    //let final_runs = runs_map.concat(runs_character, runs_category)
-    //addRank(final_runs)
+    if ((map) && (character) && (!category)) {
+        let runs_map = findRunsMap(runs, map)
+        response_runs = findRunsCharacter(runs_map, character)
 
-
-
-    if (options.length == 0) {       // no options, show all runs
-        console.log("0 arguments")
-        return runs
+        header = `${map} | ${character} | All categories `
     }
-    if (options.length == 1) {      // only one option, either map, character or category
-        console.log("1 argument")
-        let arg = options[0].name
-        switch (options[0].type) {
-            case "Map": return findRunsMap(runs, arg)
-            case "Character": return findRunsCharacter(runs, arg)
-            case "Category": return findRunsCategory(runs, arg)
-        }
+
+    if ((map) && (!character) && (category)) {
+        let runs_map = findRunsMap(runs, map)
+        response_runs = findRunsCategory(runs_map, category)
+
+        header = `${map} | All characters | ${category} `
+    }
+
+    if ((map) && (!character) && (!category)) {
+        response_runs = findRunsMap(runs, map)
+
+        header = `${map} | All characters | All categories `
+    }
+
+    if ((!map) && (character) && (category)) {
+        let runs_character = findRunsCharacter(runs, character)
+        response_runs = findRunsCategory(runs_character, category)
+
+        header = `All maps | ${character} | ${category} `
+    }
+
+    if ((!map) && (character) && (!category)) {
+        response_runs = findRunsCharacter(runs, character)
+
+        header = `All maps | ${character} | All categories `
+    }
+
+    if ((!map) && (!character) && (category)) {
+        response_runs = findRunsCategory(runs, category)
+
+        header = `All maps | All characters | ${category} `
+    }
+    if ((!map) && (!character) && (!category)) {
+        response_runs = runs
+
+        header = `All maps | All characters | All categories `
+    }
+    header += `(${response_runs.length} runs)`
+    addRank(response_runs)
+    return {
+        "runs": response_runs,
+        "header": header
     }
 }
 
