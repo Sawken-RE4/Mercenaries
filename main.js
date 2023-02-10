@@ -18,7 +18,7 @@ const app = Vue.createApp({
             categories: [
                 { name: 'Steam 60fps', active: false },
                 { name: 'PS4/5 and XboxOne/SeriesS/SeriesX', active: false },
-                { name: 'PS3, Xbox 360, Steam30fps, GC PAL, GC NTSC-J', active: false },
+                { name: 'PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J', active: false },
                 { name: 'GC NTSC', active: false },
                 { name: 'Wii', active: false },
                 { name: 'PS2, PC07', active: false }
@@ -27,8 +27,8 @@ const app = Vue.createApp({
             currentCharacterFilter: "",
             currentCategoryFilter: "",
             columns: ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"],
-            dataHeader: "All runs",
-            mercs_runs: [],
+            dataHeader: "",
+            all_runs: [],
             itemsPerPage: 50,
             currentPage: 1,
             pageCount: 0,
@@ -76,7 +76,7 @@ const app = Vue.createApp({
     },
     computed: {
         filteredRuns() {
-            let runs = this.mercs_runs
+            let runs = this.all_runs
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
             let response;
@@ -96,14 +96,14 @@ const app = Vue.createApp({
         },
     },
     created() {
-        const sheetId = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
+        const sheetID = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
         const sheetName = encodeURIComponent("The Mercenaries");
-        const range = "&range=E8:Q1427"
-        let sheetURL = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}${range}`;
+        const sheetRange = "&range=E8:Q1427"
+        let sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=${sheetName}${sheetRange}`;
         fetch(sheetURL)
             .then((response) => response.text())
             .then((csvText) => {
-                this.mercs_runs = csvToRuns(csvText);
+                this.all_runs = csvToRuns(csvText);
             })
     },
 })
