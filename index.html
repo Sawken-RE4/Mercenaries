@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/Mercenaries/static/styles.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <title>Mercenaries Leaderboard</title>
-    <link rel="icon" href="/Mercenaries/static/mercenariesIcon.png" type="image/png">
+    <link rel="icon" href="/static/mercenariesIcon.png" type="image/png">
 </head>
 <!-- Add /Mercenaries before each /static href or src before pushing to production -->
 
@@ -53,15 +53,15 @@
                     <td>{{ run.Rank }}</td>
                     <td>{{ run.ScoreF }}</td>
                     <td>
-                        <img id="character" v-bind:src="'/Mercenaries/static/characters/' + run.Character + '.jpg'">
+                        <img id="character" v-bind:src="'/static/characters/' + run.Character + '.jpg'">
                     </td>
                     <td>
-                        <img id="map" v-bind:src="'/Mercenaries/static/maps/' + run.Map + '.jpg'">
+                        <img id="map" v-bind:src="'/static/maps/' + run.Map + '.jpg'">
                     </td>
                     <td>{{ run.Platform }}</td>
                     <td>{{ run.Region }}</td>
                     <td>
-                        <img id="country" v-bind:src="'/Mercenaries/static/flags/' + run.Country + '.png'">
+                        <img id="country" v-bind:src="'/static/flags/' + run.Country + '.png'">
                         {{run.Player }}
                     </td>
                     <td>{{ run.Date }}</td>
