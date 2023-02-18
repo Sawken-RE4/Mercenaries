@@ -1,4 +1,4 @@
-import { addRank } from './functions.js';
+import { Runs } from './Runs.js';
 
 export function csvToRuns(csv) {
     /*
@@ -19,44 +19,25 @@ export function csvToRuns(csv) {
         "ScoreF": 11,
         "Country": 12,
     };
-    function csvToArray(row) {
+    function csvRowToArray(row) {
         return row
             .split(",")
             .map((val) => val.substring(1, val.length - 1));
     };
-    function insertDot(score) {
-        return score.slice(0, 3) + "." + score.slice(3)
-    }
     // Array where each item is one row of the sheet in csv format
     const csvRows = csv.split("\n");
 
-    // Array where each item is a valid data column
-    let columns = csvToArray(csvRows[0])
-        .filter(str => str != "")
-        .map(item => {
-            return item.slice(0, -1);
-        });;
+    // Get rid of the headers
+    csvRows.splice(0,1) 
 
-    let runs = [];
+    let runs = new Runs();
     csvRows.forEach(csvRow => {
-        let row = (csvToArray(csvRow))
+        let row = (csvRowToArray(csvRow))
 
-        // Ignore rows that aren't runs
-        if ((row[columnsIndex["Map"]] == "") | (row[columnsIndex["Map"]] == "Map"))
-            return;
-
-        row[columnsIndex["ScoreF"]] = insertDot(row[columnsIndex["ScoreF"]])
         // Delete data from columns I and J since they are useless
         row.splice(columnsIndex["Unknown"], 2)
-
-        let run = {};
-        // Iterate value by value of current row and assign the corresponding data
-        for (let j = 0; j < row.length; j++) {
-            run[columns[j]] = row[j];
-        }
-        runs.push(run);
+        
+        runs.addRun(...row)
     });
-    runs.shift();
-    addRank(runs)
     return runs;
 }
