@@ -30,7 +30,7 @@ const app = Vue.createApp({
             currentCategoryFilter: "",
             columns: ["Rank", "Score", "Character", "Map", "Platform", "Region", "Player", "Date", "Video", "Comment"],
             dataHeader: "",
-            all_runs: new Runs(),
+            allRuns: new Runs(),
             itemsPerPage: 50,
             currentPage: 1,
             pageCount: 0,
@@ -83,12 +83,12 @@ const app = Vue.createApp({
             let response;
 
             if (this.searchPlayer != "")    // user is using the search button
-                response = this.all_runs.findRunsPlayer(this.searchPlayer.toLowerCase())
+                response = this.allRuns.findRunsPlayer(this.searchPlayer.toLowerCase())
             else {
                 let filterMap = { ...this.currentMapFilter }.name
                 let filterCharacter = { ...this.currentCharacterFilter }.name
                 let filterCategory = { ...this.currentCategoryFilter }.name
-                response = this.all_runs.findRuns(filterMap, filterCharacter, filterCategory)
+                response = this.allRuns.findRuns(filterMap, filterCharacter, filterCategory)
             }
 
             this.dataHeader = response.header
@@ -104,7 +104,7 @@ const app = Vue.createApp({
         fetch(sheetURL)
             .then((response) => response.text())
             .then((csvText) => {
-                this.all_runs = csvToRuns(csvText);
+                this.allRuns = csvToRuns(csvText);
             })
     },
 })
