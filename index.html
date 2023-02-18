@@ -50,25 +50,25 @@
             </thead>
             <tbody>
                 <tr v-for="(run, i) in filteredRuns" :key="i">
-                    <td>{{ run.Rank }}</td>
-                    <td>{{ run.ScoreF }}</td>
+                    <td>{{ run.rank }}</td>
+                    <td>{{ run.score }}</td>
                     <td>
-                        <img id="character" v-bind:src="'static/characters/' + run.Character + '.jpg'">
+                        <img id="character" v-bind:src="'static/characters/' + run.character + '.jpg'">
                     </td>
                     <td>
-                        <img id="map" v-bind:src="'static/maps/' + run.Map + '.jpg'">
+                        <img id="map" v-bind:src="'static/maps/' + run.map + '.jpg'">
                     </td>
-                    <td>{{ run.Platform }}</td>
-                    <td>{{ run.Region }}</td>
+                    <td>{{ run.platform }}</td>
+                    <td>{{ run.region }}</td>
                     <td>
-                        <img id="country" v-bind:src="'static/flags/' + run.Country + '.png'">
-                        {{run.Player }}
+                        <img id="country" v-bind:src="'static/flags/' + run.country + '.png'">
+                        {{run.player }}
                     </td>
-                    <td>{{ run.Date }}</td>
+                    <td>{{ run.date }}</td>
                     <td>
-                        <a v-if=" isNotEmpty(run.Video)" :href="run.Link" target="_blank">{{ run.Video }}</a>
+                        <a v-if=" isNotEmpty(run.videoType)" :href="run.link" target="_blank">{{ run.videoType }}</a>
                     </td>
-                    <td>{{ run.Comment }}</td>
+                    <td>{{ run.comment }}</td>
                 </tr>
             </tbody>
         </table>
