@@ -83,6 +83,11 @@ export class Runs {
         return this.runs;
     }
 
+    getRankPlayerOnCategory(player, map, character, category) {
+        let runs = this.findRuns(map, character, category).runs
+        return (runs.find(run => run.player === player)).rank;
+    }
+
     addRank() {
         for (let i = 0; i < this.runs.length; i++) {
             this.runs[i].rank = i + 1;
@@ -95,22 +100,15 @@ export class Runs {
             (character ? run.character === character : true) &&
             (category ? run.category === category : true)
         );
-    
-        let header = [map || "All maps", character || "All characters", category || "All categories"]
-            .join(" | ") + ` (${filteredRuns.length} runs)`;
-        
-        filteredRuns.sort( (a, b) => b.score - a.score)
 
+        filteredRuns.sort( (a, b) => b.score - a.score)
+        
         for (let i = 0; i < filteredRuns.length; i++) {
             filteredRuns[i].rank = i + 1;
         }
-
-        if(!filteredRuns[0].comment.includes("Category WR")) {
-            if(filteredRuns[0].comment !== "")
-                filteredRuns[0].comment += " | Category WR"
-            else
-                filteredRuns[0].comment = "Category WR"
-        }
+        
+        const header = [map || "All maps", character || "All characters", category || "All categories"]
+        .join(" | ") + ` (${filteredRuns.length} runs)`;
         return {
             "runs": filteredRuns,
             "header": header
@@ -119,20 +117,24 @@ export class Runs {
 
     findRunsPlayer(player) {
         let runsPlayer = this.runs.filter(function (run) {
-            return run.player.toLowerCase().includes(player)
+            return run.player.toLowerCase().startsWith(player)
         });
-        runsPlayer.forEach(playerRun => {
-            let test = this.findRuns(playerRun.map, playerRun.character, playerRun.category)
-            if (test !== undefined) {
-                for (let i = 0; i < test.length; i++) {
-                    test[i].rank = i + 1;
-                }
+        if(runsPlayer.length === 0) {
+            return {
+                "runs": [],
+                "header": "No runs for that player."
             }
+        }
+        runsPlayer.forEach(playerRun => {
+            playerRun.rank = this.getRankPlayerOnCategory(playerRun.player, playerRun.map, playerRun.character, playerRun.category)
         });
         
         runsPlayer.sort( (a, b) => a.rank - b.rank)
-        let header = `All ${runsPlayer.length} runs from ${player}`
-        return { "runs": runsPlayer, "header": header }
+        const header = `All ${runsPlayer.length} runs from ${player}`
+        return { 
+            "runs": runsPlayer, 
+            "header": header 
+        }
     }
 }
   
