@@ -1,79 +1,36 @@
-export function csvToRuns(csv) {
-    /*
-    Converts a csv string onto an array of objects (runs)
-    */
-    const columnsIndex = {
-        "Character": 0,
-        "Map": 1,
-        "Platform": 2,
-        "Region": 3,
-        "Unknown": 4,
-        "Flags": 5,
-        "Player": 6,
-        "Date": 7,
-        "Video": 8,
-        "Comment": 9,
-        "Link": 10,
-        "ScoreF": 11,
-        "Country": 12,
-    };
-    function csvToArray(row) {
-        return row
-            .split(",")
-            .map((val) => val.substring(1, val.length - 1));
-    };
-    function insertDot(score) {
-        return score.slice(0, 3) + "." + score.slice(3)
-    }
-
-    // Array where each item is one row of the sheet in csv format
-    const csvRows = csv.split("\n");
-
-    // Array where each item is a valid data column
-    let columns = csvToArray(csvRows[0])
-        .filter(str => str != "")
-        .map(item => {
-            return item.slice(0, -1);
-        });;
-
-    let runs = [];
-    csvRows.forEach(csvRow => {
-        let row = (csvToArray(csvRow))
-
-        // Ignore rows that aren't runs
-        if ((row[columnsIndex["Map"]] == "") | (row[columnsIndex["Map"]] == "Map"))
-            return;
-
-        row[columnsIndex["ScoreF"]] = insertDot(row[columnsIndex["ScoreF"]])
-
-        // Delete data from columns I and J since they are useless
-        row.splice(columnsIndex["Unknown"], 2)
-
-        let run = {};
-        // Iterate value by value of current row and assign the corresponding data
-        for (let j = 0; j < row.length; j++) {
-            run[columns[j]] = row[j];
-        }
-        runs.push(run);
-    });
-    runs.shift();
-    addRank(runs)
-    return runs;
-}
-
-function addRank(runs) {
+export function addRank(runs) {
     for (let i = 0; i < runs.length; i++) {
         runs[i].Rank = i + 1;
     }
     return runs;
 }
 
-function deleteColumn(runs, column) {
-    for (let i = 0; i < runs.length; i++) {
-        delete (runs[i][column])
+function addWrComment(runs) {
+    let comment = runs[0].Comment
+    if(comment === "") {
+        runs[0].Comment = "Category WR"
     }
+    if( (comment !== "") && (!comment.includes("Category WR")) ) {
+        runs[0].Comment = comment + " | Category WR"
+    } 
+    return runs
+}
+
+function deleteColumn(runs, column) {
+    runs.forEach(run => {
+        delete run[column]
+    });
     return runs;
 } 
+
+function deleteWrComments(runs) {
+    runs.forEach(run => {
+        if(run["Comment"] === "Category WR") {
+            run["Comment"] = ""
+        }
+    });
+return runs;    
+}
 
 function findRunsMap(runs, map) {
     return runs.filter(function (run) {
@@ -160,6 +117,8 @@ export function findRuns(runs, map, character, category) {
 
     let header = [map || "All maps", character || "All characters", category || "All categories"]
         .join(" | ") + ` (${response_runs.length} runs)`;
+    
+    response_runs.sort( (a, b) => b.ScoreF - a.ScoreF)
     addRank(response_runs)
 
     return {
@@ -181,7 +140,6 @@ export function findRunsPlayer(runs, player) {
         "Xbox 360": "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J",
         "Steam 30fps": "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J",
         "GameCube PAL/NSTSC-J": "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J",
-        //"GameCube NTSC-J": "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J",
         "GameCube NTSC": "GC NTSC",
         "Wii": "Wii",
         "PlayStation 2": "PS2, PC07",
@@ -190,20 +148,19 @@ export function findRunsPlayer(runs, player) {
     let runsPlayer = runs.filter(function (run) {
         return run["Player"].toLowerCase().includes(player)
     });
-    deleteColumn(runsPlayer, "Rank")
     runsPlayer.forEach(playerRun => {
         let full_runs;
         let runs_map = findRunsMap(runs, playerRun.Map)
         
         let runs_character = findRunsCharacter(runs_map, playerRun.Character)
-        let temp = playerRun.Platform
+        let platform = playerRun.Platform
         if ((playerRun.Platform == "GameCube") && (playerRun.Region == "NTSC")) {
-            temp = "GameCube NTSC"
+            platform = "GameCube NTSC"
         }
         else if ((playerRun.Platform == "GameCube") && ((playerRun.Region == "NTSC-J") || (playerRun.Region == "PAL"))) {
-            temp = "GameCube PAL/NTSC-J"
+            platform = "GameCube PAL/NTSC-J"
         }
-        full_runs = findRunsCategory(runs_character, platformToCategory[temp])
+        full_runs = findRunsCategory(runs_character, platformToCategory[platform])
         if (full_runs !== undefined) {
             addRank(full_runs)
         }
