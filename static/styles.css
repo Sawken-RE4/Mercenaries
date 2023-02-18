@@ -100,8 +100,7 @@ a:visited {
 .leaderboard {
     width: 100%;
     margin-top: 3px;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
+    border-collapse:collapse
 }
 
 .leaderboard th,
@@ -136,7 +135,6 @@ a:visited {
 .leaderboard td:last-child {
     text-align: center;
 }
-
 
 .pagination {
     display: flex;
