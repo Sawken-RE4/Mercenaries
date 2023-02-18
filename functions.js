@@ -40,7 +40,7 @@ export function csvToRuns(csv) {
     csvRows.forEach(csvRow => {
         let row = (csvToArray(csvRow))
 
-        // Ignore rows that arent runs
+        // Ignore rows that aren't runs
         if ((row[columnsIndex["Map"]] == "") | (row[columnsIndex["Map"]] == "Map"))
             return;
 
@@ -170,6 +170,10 @@ export function findRunsPlayer(runs, player) {
     let runsPlayer = runs.filter(function (run) {
         return run["Player"].toLowerCase().includes(player)
     });
+    /*     let runsPlayerWithRank;
+        runsPlayer.forEach(runPlayer => {
+            runsPlayerWithRank.push(findRuns())
+        }); */
     let header = `All ${runsPlayer.length} runs from ${player}`
     return { "runs": runsPlayer, "header": header }
 }
