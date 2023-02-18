@@ -170,6 +170,10 @@ export function findRunsPlayer(runs, player) {
     let runsPlayer = runs.filter(function (run) {
         return run["Player"].toLowerCase().includes(player)
     });
+    runsPlayer = runsPlayer.map(run => { 
+        delete run.Rank; 
+        return run; 
+    })
     /*     let runsPlayerWithRank;
         runsPlayer.forEach(runPlayer => {
             runsPlayerWithRank.push(findRuns())
