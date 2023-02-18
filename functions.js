@@ -87,7 +87,7 @@ export function findRuns(runs, map, character, category) {
         });
     }
     function findRunsCategory(runs, category) {
-        const newGenConsoles = ["PlayStation 4", "PlayStation 5", "Xbox One", "Xbox Series X", "Xbox Series S"]
+        const newGenConsoles = ["Switch", "PlayStation 4", "PlayStation 5", "Xbox One", "Xbox Series X", "Xbox Series S"]
         const oldGenConsoles = ["PlayStation 3", "Xbox 360", "Steam 30fps", "GameCube"]
 
         switch (category) {
@@ -95,7 +95,7 @@ export function findRuns(runs, map, character, category) {
                 return runs.filter(function (run) {
                     return (run["Platform"] == category) | (run["Platform"] == category.slice(0, 5))
                 });
-            case "PS4/5 and XboxOne/SeriesS/SeriesX":
+            case "Switch, PS4/5 and XboxOne/SeriesS/SeriesX":
                 return runs.filter(function (run) {
                     return newGenConsoles.includes(run["Platform"])
                 });
@@ -177,11 +177,7 @@ export function findRunsPlayer(runs, player) {
     let header = `All ${runsPlayer.length} runs from ${player}`
     return { "runs": runsPlayer, "header": header }
 }
-/* Useful for later
-
-let test = runs.filter(function (run) {
-    return run.Map == "Village" & run.Character == "Wesker"
-});
+/* 
 
 function parseDate(dateString) {
     return new Date(dateString);

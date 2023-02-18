@@ -17,7 +17,7 @@ const app = Vue.createApp({
             ],
             categories: [
                 { name: 'Steam 60fps', active: false },
-                { name: 'PS4/5 and XboxOne/SeriesS/SeriesX', active: false },
+                { name: 'Switch, PS4/5 and XboxOne/SeriesS/SeriesX', active: false },
                 { name: 'PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J', active: false },
                 { name: 'GC NTSC', active: false },
                 { name: 'Wii', active: false },
