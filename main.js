@@ -1,4 +1,6 @@
-import { csvToRuns, findRuns, findRunsPlayer } from './functions.js';
+import { findRuns, findRunsPlayer } from './functions.js';
+import { csvToRuns } from './csvToRuns.js';
+
 const app = Vue.createApp({
     data() {
         return {
