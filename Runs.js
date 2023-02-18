@@ -7,44 +7,54 @@ export class Run {
         this.player = player;
         this.date = date;
         this.videoType = video;
-        this.comment = comment;
+        this.comment = this.setComment(comment);
         this.link = link;
         this.score = score.slice(0, 3) + "." + score.slice(3);
         this.country = country;
         this.rank = 0;
+        this.category = this.setCategoryByPlatform(platform, region)
+    }
+
+    setCategoryByPlatform(platform, region) {
         switch(platform) {
             case "Steam 60fps":
             case "Steam":
-                this.category = "Steam 60fps"
-                break;
+                return "Steam 60fps"
             case "Switch":
             case "PlayStation 4":
             case "PlayStation 5":
             case "Xbox One":
             case "Xbox Series S":
             case "Xbox Series X":
-                this.category = "Switch, PS4/5 and XboxOne/SeriesS/SeriesX" 
-                break; 
+                return "Switch, PS4/5 and XboxOne/SeriesS/SeriesX" 
             case "PlayStation 3":
             case "Xbox 360":
             case "Steam 30fps":
-                this.category = "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J"
-                break;
+                return "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J"
             case "GameCube":
-                if ((this.region === "PAL") || (this.region === "NTSC-J")) {
-                    this.category = "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J"
+                if ((region === "PAL") || (region === "NTSC-J")) {
+                    return "PS3, Xbox 360, Steam 30fps, GC PAL, GC NTSC-J"
                 }                    
                 else {
-                    this.category = "GC NTSC"
+                    return "GC NTSC"
                 }
-                break;
             case "Wii":
-                this.category = "Wii"
-                break;
+                return "Wii"
             case "PlayStation 2":
             case "PC '07":
-                this.category = "PS2, PC07"
-                break;
+                return "PS2, PC07"
+        }        
+    }
+
+    setComment(comment) {
+        if((comment === "") || (!comment.includes("Category WR")) && (!comment.includes("Unofficial WR |"))) {
+            return comment
+        }
+        if (comment.includes("Category WR")) {
+            return comment.replace("Category WR", "")
+        }
+        if (comment.includes("Unofficial WR |")) {
+            return comment.replace("Unofficial WR |", "")
         }
     }
 }
@@ -94,7 +104,13 @@ export class Runs {
         for (let i = 0; i < filteredRuns.length; i++) {
             filteredRuns[i].rank = i + 1;
         }
-    
+
+        if(!filteredRuns[0].comment.includes("Category WR")) {
+            if(filteredRuns[0].comment !== "")
+                filteredRuns[0].comment += " | Category WR"
+            else
+                filteredRuns[0].comment = "Category WR"
+        }
         return {
             "runs": filteredRuns,
             "header": header
