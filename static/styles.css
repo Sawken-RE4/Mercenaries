@@ -1,159 +1,157 @@
 * {
-    font-family: 'Roboto', Courier, monospace;
+	font-family: "Roboto", Courier, monospace;
 }
 
-a:link {
-    text-decoration: none;
+a:link,
+a:visited {
+	text-decoration: none;
+	color: #0066cc;
 }
 
 a:hover {
-    font-weight: bold;
-}
-
-a:visited {
-    text-decoration: none;
-    color: #0066cc;
+	font-weight: bold;
 }
 
 #country {
-    width: 35px;
-    height: 20px;
-    margin-right: 5px;
-    vertical-align: middle;
+	width: 35px;
+	height: 20px;
+	margin-right: 5px;
+	vertical-align: middle;
 }
 
 #character {
-    width: 35px;
-    height: 35px;
-    margin-right: 5px;
-    vertical-align: middle;
-    filter: brightness(200%);
-    border-radius: 65%;
-    border-style: double;
-    transition: transform 0.5s;
+	width: 35px;
+	height: 35px;
+	margin-right: 5px;
+	vertical-align: middle;
+	filter: brightness(200%);
+	border-radius: 65%;
+	border-style: double;
+	transition: transform 1s;
+	transition-duration: 5ms;
 }
 
 #character:hover,
 #map:hover {
-    transform: scale(2.5)
+	transform: scale(2.5);
 }
 
 #map {
-    width: 100px;
-    height: 35px;
-    margin-right: 5px;
-    vertical-align: middle;
-    filter: brightness(150%);
-    border-radius: 15%;
-    border-style: double;
-    transition: transform 0.5s;
+	width: 100px;
+	height: 35px;
+	margin-right: 5px;
+	vertical-align: middle;
+	filter: brightness(150%);
+	border-radius: 15%;
+	border-style: double;
+	transition: transform 1s;
+	transition-duration: 5ms;
 }
-
 
 .search-input,
 .clear-filters,
 .filter-button-map,
 .filter-button-character,
 .filter-button-category {
-    padding: 8px 15px;
-    font-size: 1.1em;
-    color: white;
-    font-weight: bold;
-    background-color: #000000;
-    border-radius: 10%;
-    cursor: pointer;
+	padding: 8px 15px;
+	font-size: 1.1em;
+	color: white;
+	font-weight: bold;
+	background-color: #000000;
+	border-radius: 10%;
+	cursor: pointer;
 }
 
 .search-input::placeholder {
-    opacity: 1;
+	opacity: 1;
 }
 
 .search-input {
-    width: 150px;
+	width: 150px;
 }
 
 .center-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .clear-filters:active {
-    background-color: #943535;
+	background-color: #943535;
 }
 
 .filters {
-    text-align: center;
-    list-style-type: none;
+	text-align: center;
+	list-style-type: none;
 }
 
 .active {
-    background-color: #943535;
+	background-color: #943535;
 }
 
 .mainHeader {
-    text-align: center;
-    margin-top: 1px;
-    margin-bottom: 10px;
+	text-align: center;
+	margin-top: 1px;
+	margin-bottom: 10px;
 }
 
 .leaderboard {
-    width: 100%;
-    margin-top: 3px;
-    border-collapse:collapse
+	width: 100%;
+	margin-top: 3px;
+	border-collapse: collapse;
 }
 
 .leaderboard th,
 .leaderboard td {
-    padding: 8px;
-    text-align: center;
+	padding: 8px;
+	text-align: center;
 }
 
 .leaderboard th {
-    background-color: #000000;
-    color: white;
+	background-color: #000000;
+	color: white;
 }
 
 .leaderboard tr {
-    line-height: 85%;
+	line-height: 85%;
 }
 
 .leaderboard tr:nth-child(even) {
-    background-color: #f2f2f2;
+	background-color: #f2f2f2;
 }
 
 .leaderboard tr:hover {
-    background-color: #ddd;
+	background-color: #ddd;
 }
 
 .leaderboard td:first-child {
-    text-align: center;
-    font-weight: bold;
-    width: 3%;
+	text-align: center;
+	font-weight: bold;
+	width: 3%;
 }
 
 .leaderboard td:last-child {
-    text-align: center;
+	text-align: center;
 }
 
 .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
 }
 
 .pagination button,
 .pagination span {
-    padding: 10px 20px;
-    margin: 0 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: large;
+	padding: 10px 20px;
+	margin: 0 10px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	cursor: pointer;
+	font-weight: bold;
+	font-size: large;
 }
 
 .pagination span {
-    font-weight: bold;
+	font-weight: bold;
 }
