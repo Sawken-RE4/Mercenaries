@@ -1,88 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="static/styles.css" />
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<title>Mercenaries Leaderboard</title>
+		<link rel="icon" href="static/mercenariesIcon.png" type="image/png" />
+	</head>
+	<!-- Add /Mercenaries before each /static href or src before pushing to production -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <title>Mercenaries Leaderboard</title>
-    <link rel="icon" href="static/mercenariesIcon.png" type="image/png">
-</head>
-<!-- Add /Mercenaries before each /static href or src before pushing to production -->
+	<body>
+		<div id="app">
+			<h1 class="mainHeader">Mercenaries Leaderboard</h1>
+			<h1 class="mainHeader">{{ dataHeader }}</h1>
 
-<body>
-    <div id="app">
-        <h1 class="mainHeader">Mercenaries Leaderboard</h1>
-        <h1 class="mainHeader">{{ dataHeader }}</h1>
-
-        <li class="filters">
-            <button @click="clearFilters()" class="clear-filters">Clear filters</button>
-            <input v-if="noFilters()" class="search-input" type="text" placeholder="Search player &#x1F50D;"
-                v-model="searchPlayer">
-        </li>
-        <li class="filters" id="maps">
-            <button v-for="(map, i) in maps" :key="i" class="filter-button-map" :class="{ active: map.active }"
-                @click="toggleActiveMap(map)">
-                {{map.name}}
-            </button>
-        </li>
-        <li class="filters" id="characters">
-            <button v-for="(character, i) in characters" :key="i" class="filter-button-character"
-                :class="{ active: character.active }" @click="toggleActiveCharacter(character)">
-                {{character.name}}
-            </button>
-        </li>
-        <li class="filters" id="categories">
-            <button v-for="(category, i) in categories" :key="i" class="filter-button-category"
-                :class="{ active: category.active }" @click="toggleActiveCategory(category)">
-                {{category.name}}
-            </button>
-        </li>
-        <table class="leaderboard">
-            <thead>
-                <tr>
-                    <th v-for="(column, i) in columns" :key="i">
-                        {{ column }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(run, i) in filteredRuns" :key="i">
-                    <td>{{ run.rank }}</td>
-                    <td>{{ run.score }}</td>
-                    <td>
-                        <img id="character" v-bind:src="'static/characters/' + run.character + '.jpg'">
-                    </td>
-                    <td>
-                        <img id="map" v-bind:src="'static/maps/' + run.map + '.jpg'">
-                    </td>
-                    <td>{{ run.platform }}</td>
-                    <td>{{ run.region }}</td>
-                    <td>
-                        <img id="country" v-bind:src="'static/flags/' + run.country + '.png'">
-                        {{run.player }}
-                    </td>
-                    <td>{{ run.date }}</td>
-                    <td>
-                        <a v-if=" isNotEmpty(run.videoType)" :href="run.link" target="_blank">{{ run.videoType }}</a>
-                    </td>
-                    <td>{{ run.comment }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="pagination">
-            <button v-if="currentPage > 1" @click="changePage(currentPage - 1)">
-                Prev
-            </button>
-            <span>{{ currentPage }} / {{ pageCount }}</span>
-            <button v-if="currentPage < pageCount" @click="changePage(currentPage + 1)">
-                Next
-            </button>
-        </div>
-    </div>
-    <script src="main.js" type="module"></script>
-</body>
-
+			<li class="filters">
+				<button @click="clearFilters()" class="clear-filters">Clear filters</button>
+				<input
+					v-if="noFilters()"
+					class="search-input"
+					type="text"
+					placeholder="Search player &#x1F50D;"
+					v-model="searchPlayer"
+				/>
+			</li>
+			<li class="filters" id="maps">
+				<button
+					v-for="(map, i) in maps"
+					:key="i"
+					class="filter-button-map"
+					:class="{ active: map.active }"
+					@click="toggleActiveMap(map)"
+				>
+					{{map.name}}
+				</button>
+			</li>
+			<li class="filters" id="characters">
+				<button
+					v-for="(character, i) in characters"
+					:key="i"
+					class="filter-button-character"
+					:class="{ active: character.active }"
+					@click="toggleActiveCharacter(character)"
+				>
+					{{character.name}}
+				</button>
+			</li>
+			<li class="filters" id="categories">
+				<button
+					v-for="(category, i) in categories"
+					:key="i"
+					class="filter-button-category"
+					:class="{ active: category.active }"
+					@click="toggleActiveCategory(category)"
+				>
+					{{category.name}}
+				</button>
+			</li>
+			<table class="leaderboard">
+				<thead>
+					<tr>
+						<th v-for="(column, i) in columns" :key="i">{{ column }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="(run, i) in filteredRuns" :key="i">
+						<td>{{ run.rank }}</td>
+						<td>{{ run.score }}</td>
+						<td>
+							<img
+								id="character"
+								v-bind:src="'static/characters/' + run.character + '.jpg'"
+							/>
+						</td>
+						<td>
+							<img id="map" v-bind:src="'static/maps/' + run.map + '.jpg'" />
+						</td>
+						<td>{{ run.platform }}</td>
+						<td>{{ run.region }}</td>
+						<td>
+							<img id="country" v-bind:src="'static/flags/' + run.country + '.png'" />
+							{{run.player }}
+						</td>
+						<td>{{ run.date }}</td>
+						<td>
+							<a v-if=" isNotEmpty(run.videoType)" :href="run.link" target="_blank"
+								>{{ run.videoType }}</a
+							>
+						</td>
+						<td>{{ run.comment }}</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="pagination">
+				<button v-if="currentPage > 1" @click="changePage(currentPage - 1)">Prev</button>
+				<span>{{ currentPage }} / {{ pageCount }}</span>
+				<button v-if="currentPage < pageCount" @click="changePage(currentPage + 1)">
+					Next
+				</button>
+			</div>
+		</div>
+		<script src="main.js" type="module"></script>
+	</body>
 </html>
