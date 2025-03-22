@@ -111,7 +111,7 @@ const app = Vue.createApp({
 	created() {
 		const sheetID = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
 		const sheetName = encodeURIComponent("Mercs");
-		const sheetRange = "&range=E8:Q1427";
+		const sheetRange = "&range=E8:Q1461";
 		let sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=${sheetName}${sheetRange}`;
 		fetch(sheetURL)
 			.then((response) => response.text())
