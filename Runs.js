@@ -175,4 +175,60 @@ export class Runs {
 			header: header,
 		};
 	}
+
+	getNumRunners(runners) {
+		// same runner can appear more than once, but needs to be counted once
+		return [...new Set(runners)].length;
+	}
+
+	getPlatformStats() {
+		const platforms = [
+			"Steam 60fps",
+			"Steam 30fps",
+			"PlayStation 5",
+			"PlayStation 4",
+			"PlayStation 3",
+			"PlayStation 2",
+			"GameCube",
+			"PC '07",
+			"Switch",
+			"Xbox One",
+			"Xbox Series S",
+			"Xbox Series X",
+			"Wii",
+			"Xbox 360",
+		];
+		let response = [];
+		platforms.forEach((platform) => {
+			let dict = {};
+			let platformRuns = this.runs
+				.map(function (run) {
+					if (run.platform === "Steam") run.platform = "Steam 60fps";
+					return run;
+				})
+				.filter(function (run) {
+					return run.platform === platform;
+				});
+			dict.platform = platform;
+			dict.runs = platformRuns.length;
+			let runners = platformRuns.map(function (run) {
+				return run.player;
+			});
+			dict.numRunners = this.getNumRunners(runners);
+			response.push(dict);
+		});
+		let totalRuns = response.reduce((total, dict) => {
+			return total + dict.runs;
+		}, 0);
+		let totalRunners = this.runs.map(function (run) {
+			return run.player;
+		});
+		response.push({
+			platform: "Total",
+			runs: totalRuns,
+			numRunners: this.getNumRunners(totalRunners),
+		});
+		response = response.sort((a, b) => b.runs - a.runs);
+		return response;
+	}
 }

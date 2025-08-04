@@ -1,0 +1,38 @@
+.stats {
+	width: 15%;
+	margin-top: 3px;
+	border-collapse: collapse;
+}
+
+.stats th,
+.stats td {
+	padding: 10px;
+	text-align: center;
+}
+
+.stats th {
+	background-color: #000000;
+	color: white;
+}
+
+.stats tr {
+	line-height: 100%;
+}
+
+.stats tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.stats tr:hover {
+	background-color: #ddd;
+}
+
+.stats td:first-child {
+	text-align: center;
+	font-weight: bold;
+	width: 8%;
+}
+
+.stats td:last-child {
+	text-align: center;
+}

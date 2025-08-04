@@ -28,7 +28,7 @@ const app = Vue.createApp({
 			currentMapFilter: "",
 			currentCharacterFilter: "",
 			currentCategoryFilter: "",
-			columns: [
+			dataColumns: [
 				"Rank",
 				"Score",
 				"Character",
@@ -40,12 +40,14 @@ const app = Vue.createApp({
 				"Video",
 				"Comment",
 			],
+			statsColumns: ["Platform", "Runs", "Runners", "---", ""],
 			dataHeader: "",
 			allRuns: new Runs(),
 			itemsPerPage: 50,
 			currentPage: 1,
 			pageCount: 0,
 			searchPlayer: "",
+			showStats: false,
 		};
 	},
 	methods: {
@@ -75,6 +77,9 @@ const app = Vue.createApp({
 			this.categories.forEach((c) => (c.active = false));
 			category.active = !category.active;
 			this.currentCategoryFilter = category;
+		},
+		toggleStats() {
+			this.showStats = !this.showStats;
 		},
 		noFilters() {
 			return (
@@ -107,11 +112,14 @@ const app = Vue.createApp({
 			this.pageCount = Math.ceil(response.runs.length / this.itemsPerPage);
 			return response.runs.slice(start, end);
 		},
+		getStats() {
+			return this.allRuns.getPlatformStats();
+		},
 	},
 	created() {
 		const sheetID = "1UbFSXJwmFCBQDZibaDoJon3pJmA342L9l0mF5Dmubco";
 		const sheetName = encodeURIComponent("Mercs");
-		const sheetRange = "&range=E8:Q1461";
+		const sheetRange = "&range=E8:Q1469";
 		let sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=${sheetName}${sheetRange}`;
 		fetch(sheetURL)
 			.then((response) => response.text())

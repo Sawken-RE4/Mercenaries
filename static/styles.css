@@ -50,6 +50,7 @@ a:hover {
 
 .search-input,
 .clear-filters,
+.toggle-stats,
 .filter-button-map,
 .filter-button-character,
 .filter-button-category {
@@ -76,7 +77,8 @@ a:hover {
 	justify-content: center;
 }
 
-.clear-filters:active {
+.clear-filters:active,
+.toggle-stats:active {
 	background-color: #943535;
 }
 
@@ -99,6 +101,9 @@ a:hover {
 	width: 100%;
 	margin-top: 3px;
 	border-collapse: collapse;
+	border-radius: 20px 20px 20px 20px;
+	overflow: hidden;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
 }
 
 .leaderboard th,
@@ -114,6 +119,10 @@ a:hover {
 
 .leaderboard tr {
 	line-height: 85%;
+}
+
+.leaderboard tr:first-child td {
+	font-weight: bold;
 }
 
 .leaderboard tr:nth-child(even) {
