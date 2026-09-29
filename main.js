@@ -126,6 +126,7 @@ const app = Vue.createApp({
 			.then((csvText) => {
 				this.allRuns = csvToRuns(csvText);
 			});
+			
 	},
 });
 app.mount("#app");
